@@ -1,0 +1,33 @@
+cmake_minimum_required(VERSION 3.22.1)
+project("mk_shaolin_monks_recomp" CXX C)
+
+set(CMAKE_CXX_STANDARD 23)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+
+# Flags de otimização pesada para ARM64
+add_compile_options(-O3 -flto -fomit-frame-pointer)
+
+# Incluir diretórios de código
+include_directories(src/include)
+
+# Fonte do Recomp (onde ficará a tradução e wrappers)
+file(GLOB_RECURSE RECOMP_SOURCES
+    "src/*.cpp"
+    "src/*.c"
+)
+
+# Criar biblioteca nativa para o Android (JNI)
+add_library(shaolin_monks SHARED ${RECOMP_SOURCES})
+
+# Linkar bibliotecas do sistema Android (Log, EGL, Vulkan, Android Native Window)
+find_library(log-lib log)
+find_library(android-lib android)
+find_library(vulkan-lib vulkan)
+
+target_link_libraries(shaolin_monks
+    ${log-lib}
+    ${android-lib}
+    ${vulkan-lib}
+    EGL
+    GLESv3
+)
