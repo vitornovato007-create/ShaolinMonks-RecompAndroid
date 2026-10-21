@@ -19,7 +19,7 @@ jobs:
       - name: Executar Análise do XBE
         run: |
           echo "=== Iniciando análise do XBE na nuvem ==="
-          python tools/analyze_xbe.py game/default.xbe xbe_info.json
+          python tools/analyse_xbe.py game/default.xbe xbe_info.json
 
       - name: Salvar Relatório de Análise como Artefato
         uses: actions/upload-artifact@v4
